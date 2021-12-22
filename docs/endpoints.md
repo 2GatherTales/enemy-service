@@ -1,12 +1,12 @@
-#Enemy Service Endpoints
+# Enemy Service Endpoints
 
-####api/enemy//findall
+#### api/enemy//findall
 
-####api/enemy/find/{id}
+#### api/enemy/find/{id}
 
-####api/enemy/delete
+#### api/enemy/delete
 
-####Sample structure for api/enemy/create
+#### Sample structure for api/enemy/create
 ```
 {
        "id": 3,
