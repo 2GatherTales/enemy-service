@@ -1,5 +1,6 @@
 package com.gathertales.enemyservice.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gathertales.enemyservice.model.customprincipal.CustomPrincipal;
 import com.gathertales.enemyservice.model.enemy.Enemy;
 import com.gathertales.enemyservice.service.implementation.EnemyServiceImpl;
@@ -10,8 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -59,12 +64,27 @@ public class EnemyController {
         }
     }
 
-    @PostMapping(value = "create")
-    public ResponseEntity<Enemy> create(@RequestBody Enemy enemy) {
+    @PostMapping(value = "counter/{id}")
+    public ResponseEntity<Enemy> attack(@RequestBody String body, @PathVariable("id") Long id) {
         try {
-            Enemy nenemy = enemyRepository.create(enemy);
-            return new ResponseEntity<Enemy>(nenemy,
-                    HttpStatus.OK);
+            System.out.println(body);
+            Integer dmg =  ((Map<String, Integer>) new ObjectMapper().readValue(body, Object.class)).get("dmg");
+            Enemy enemy = enemyRepository.find(id);
+            enemy.calcGetAttacked(dmg);
+            enemyRepository.update(enemy);
+            return new ResponseEntity<Enemy>(enemy, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Enemy>(
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "create")
+    public ResponseEntity<Enemy> create() {
+        try {
+            Enemy enemy = new Enemy();
+            enemy = enemyRepository.create(enemy);
+            return new ResponseEntity<Enemy>(enemy, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<Enemy>(
                     HttpStatus.BAD_REQUEST);

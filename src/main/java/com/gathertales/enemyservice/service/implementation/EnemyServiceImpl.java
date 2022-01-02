@@ -17,7 +17,7 @@ public class EnemyServiceImpl implements GenericService<Enemy> {
     public Iterable<Enemy> findAll() { return enemyRepository.findAll(); }
 
     @Override
-    public Enemy find(String id) { return (Enemy) enemyRepository.findById(id).get(); }
+    public Enemy find(Long id) { return (Enemy) enemyRepository.findById(id).get(); }
 
     @Override
     public Enemy create(Enemy enemy) {   return (Enemy) enemyRepository.save(enemy); }
