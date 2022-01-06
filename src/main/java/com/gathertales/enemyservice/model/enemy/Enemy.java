@@ -125,7 +125,12 @@ public class Enemy implements Serializable {
     }
 
     public void calcGetAttacked(Integer dmg){
-        this.hp = this.hp-dmg;
+        this.hp = (this.hp-dmg);
+        isEnemyDead();
     }
 
+    private void isEnemyDead(){
+        if(this.hp<=0)
+        this.dead = true;
+    }
 }
